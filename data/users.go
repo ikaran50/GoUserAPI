@@ -2,6 +2,7 @@ package data
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"time"
 )
@@ -17,6 +18,8 @@ type User struct {
 
 // Users is a collection of user
 type Users []*User
+
+var errorMessage = fmt.Errorf("User Not found")
 
 func (u *Users) ToJSON(w io.Writer) error {
 	e := json.NewEncoder(w)
@@ -37,6 +40,24 @@ func AddUser(u *User) {
 	latestId := userList[len(userList)-1].ID
 	u.ID = latestId + 1
 	userList = append(userList, u)
+}
+
+func UpdateUser(id int, u *User) error {
+	foundUser, pos, err := FindExistingUser(id)
+	if foundUser != nil {
+		userList[pos] = u
+		return nil
+	}
+	return err
+}
+
+func FindExistingUser(id int) (*User, int, error) {
+	for pos, u := range userList {
+		if u.ID == id {
+			return u, pos, nil
+		}
+	}
+	return nil, -1, errorMessage
 }
 
 var userList = []*User{

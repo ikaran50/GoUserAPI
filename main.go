@@ -25,9 +25,9 @@ func main() {
 		Addr:         "127.0.0.1:9090",
 		Handler:      sm,
 		ErrorLog:     l,
-		ReadTimeout:  5 * time.Second,
-		WriteTimeout: 10 * time.Second,
-		IdleTimeout:  120 * time.Second,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 15 * time.Second,
+		IdleTimeout:  140 * time.Second,
 	}
 
 	// start the server
@@ -47,6 +47,6 @@ func main() {
 	sig := <-c
 	log.Println("Got signal:", sig)
 
-	ctx, _ := context.WithTimeout(context.Background(), 30*time.Second)
+	ctx, _ := context.WithTimeout(context.Background(), 40*time.Second)
 	s.Shutdown(ctx)
 }
